@@ -1,5 +1,5 @@
 class HashMap {
-    constructor(initialCapacity=8) {
+    constructor(initialCapacity=11) {
         this.length = 0;
         this._hashTable = [];
         this._capacity = initialCapacity;
@@ -24,6 +24,9 @@ class HashMap {
 
         if(!this._hashTable[index]){
             this.length++;
+
+        } else {
+            console.warn('collision @ key <', this._hashTable[index].key, '>, overwriting value <', this._hashTable[index].value, '> with value <', value, '>.');
         }
         this._hashTable[index] = {
             key,
@@ -44,7 +47,7 @@ class HashMap {
     }
 
     _findSlot(key) {
-        const hash = HashMap._hashString(key);
+        const hash = this._hashString(key);
         const start = hash % this._capacity;
 
         for (let i=start; i<start + this._capacity; i++) {
@@ -71,19 +74,21 @@ class HashMap {
         }
     }
 
-    static _hashString(string) {
-        let hash = 5381;
-        for (let i = 0; i < string.length; i++) {
-            //Bitwise left shift with 5 0s - this would be similar to
-            //hash*31, 31 being the decent prime number
-            //but bit shifting is a faster way to do this
-            //tradeoff is understandability
-            hash = (hash << 5) + hash + string.charCodeAt(i);
-            //converting hash to a 32 bit integer
-            hash = hash & hash;
-        }
-        //making sure hash is unsigned - meaning non-negtive number.
-        return hash >>> 0;
+    _hashString(string) {
+        // let hash = 5381;
+        // for (let i = 0; i < string.length; i++) {
+        //     //Bitwise left shift with 5 0s - this would be similar to
+        //     //hash*31, 31 being the decent prime number
+        //     //but bit shifting is a faster way to do this
+        //     //tradeoff is understandability
+        //     hash = (hash << 5) + hash + string.charCodeAt(i);
+        //     //converting hash to a 32 bit integer
+        //     hash = hash & hash;
+        // }
+        // //making sure hash is unsigned - meaning non-negtive number.
+        // return hash >>> 0;
+        console.log('string', string, 'cap', this._capacity, 'mod', parseInt(string, 10) % (this._capacity));
+        return parseInt(string, 10) % (this._capacity);
     }
 }
 HashMap.MAX_LOAD_RATIO = 0.5;

@@ -19,7 +19,7 @@ function main() {
     console.log('lotr: ', lotr);
 };
 
-main();
+// main();
 
 // whatDoesThisDo
 
@@ -35,6 +35,32 @@ main();
 //     map2.set(str3,20);
 //     map2.set(str4,10);
 //
-//     console.log(map1.get(str1));
-//     console.log(map2.get(str3));
+//     // console.log(map1.get(str1));
+//     // console.log(map2.get(str3));
+//
+//
+//
 // }
+//
+// WhatDoesThisDo();
+// expecting
+// 20 (val from str2 collides and overwrites val from str1)
+// 10 (val from str4 collides and overwrites val from str3)
+
+// understanding
+
+function understanding() {
+  let und = new HashMap();
+  und.set(10, 1);
+  und.set(22, 2);
+  und.set(31, 3);
+  und.set(4, 4);
+  und.set(15, 5);
+  und.set(28, 6);
+  und.set(17, 7);
+  und.set(88, 8);
+  und.set(59, 9);
+
+  console.log(und);
+}
+understanding();
