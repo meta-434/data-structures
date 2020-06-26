@@ -47,7 +47,7 @@ class BinarySearchTree {
 
     find(key) {
         // If the item is found at the root then return that value
-        if (this.key == key) {
+        if (this.key === key) {
             return this.value;
         }
         /* If the item you are looking for is less than the root
@@ -73,7 +73,7 @@ class BinarySearchTree {
     }
 
     remove(key) {
-        if (this.key == key) {
+        if (this.key === key) {
             if (this.left && this.right) {
                 const successor = this.right._findMin();
                 this.key = successor.key;
@@ -110,10 +110,10 @@ class BinarySearchTree {
 
     _replaceWith(node) {
         if (this.parent) {
-            if (this == this.parent.left) {
+            if (this === this.parent.left) {
                 this.parent.left = node;
             }
-            else if (this == this.parent.right) {
+            else if (this === this.parent.right) {
                 this.parent.right = node;
             }
 
@@ -156,7 +156,12 @@ function main() {
     BST.insert(5, 5);
     BST.insert(7, 7);
 
-    console.log(height(BST));
+    console.log('isBst? ',isBst(BST));
+    console.log('height? ', height(BST));
+    console.log('is balanced? ', balancedBST(BST))
+    console.log('third largest', thirdLargest(BST));
+    console.log('sameBST? ', sameBST([3,5,4,6,1,0,2],[3,1,5,2,4,6,0]))
+    console.log('sameBST? ', sameBST([3,5,4,9,1,0,2],[3,1,5,2,4,6,0]))
 }
 
 main();
@@ -170,11 +175,79 @@ function tree(t){
     return tree(t.left) + t.value + tree(t.right)
 }
 
-function height(t){
-    if(!t) return 0;
-    if (t && t.left === null && t.right === null) return 1;
-    else {
-        let count = 1;
-        
+function height(t, counter = 1){
+    if (t.left && t.right) return Math.max(...[height(t.left, counter + 1), height(t.right, counter + 1)]);
+    else if (t.left) return height(t.left, counter + 1);
+    else if (t.right) return height(t.right, counter + 1);
+    else return counter;
+}
+
+function isBst(t) {
+    if (!t.right && !t.left) return 'final result: ' + true; // case no branches, also final result as leaves have no children L or R.
+    if (t.left && !t.right) return isBst(t.left); // case left branch only
+    if (!t.left && t.right) return isBst(t.right); // case right branch only
+    if (t.left && t.right) { // case two branches]
+        if (t.left.value < t.right.value) return isBst(t.left) && isBst(t.right); // if both leaves are BST +, check if their leaves are also BST +
+        return false;
     }
+}
+
+function thirdLargest(t, num = []) {
+
+    if (!t.left && !t.right) {
+        num.push(t.value);
+        const sorted = (num.sort());
+        return sorted[2] ? sorted[2] : 'The tree has less than 3 nodes.';
+    }
+    if (t.left !== null && t.right === null) {
+        num.push(t.value);
+        return thirdLargest(t.left, num);
+    }
+    if (t.right !== null && t.left === null) {
+        num.push(t.value);
+        return thirdLargest(t.right, num);
+    }
+    if (t.right !== null && t.left !== null) {
+        num.push(t.value);
+        return thirdLargest(t.right, num);
+    }
+
+}
+
+function balancedBST(t) {
+    function helperHeight(t) {
+        if (t === null) return 0;
+        return Math.max(helperHeight(t.left), helperHeight(t.right))+1;
+    }
+    if(t === null) {
+        return true;
+    }
+    let rightSide = helperHeight(t.right);
+    let leftSide = helperHeight(t.left);
+
+
+    const diff = Math.abs(rightSide - leftSide)
+    if (diff > 1) {
+        return false;
+    }
+    else {
+        return balancedBST(t.left) && balancedBST(t.right);
+    }
+}
+
+
+// O(n) complexity due to for()
+// BSTs will be the same if their values pre-tree are the same.
+function sameBST(arr1, arr2) {
+    arr1.sort();
+    arr2.sort();
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+    for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) {
+            return false;
+        }
+    }
+    return true;
 }
