@@ -128,14 +128,35 @@ class LinkedList {
 // empty: head (null)
 
 function main () {
-    const SLL = new LinkedList();
-    SLL.insertLast('orange');
-    SLL.insertLast('Dragon Fruit');
-    SLL.insertLast('Persimmon');
+    // const SLL = new LinkedList();
+    // SLL.insertLast('orange');
+    // SLL.insertLast('Dragon Fruit');
+    // SLL.insertLast('Persimmon');
+    //
+    //
+    // SLL.insertAt(1, 'apple');
+    // console.log(cycleList(SLL));
+    // console.log(JSON.stringify(SLL, null, 2));
 
-    SLL.insertAt(1, 'apple');
-    console.log(cycleList(SLL));
-    console.log(JSON.stringify(SLL, null, 2));
+    const dupList = new LinkedList();
+    const dupList2 = new LinkedList();
+    dupList.insertLast('B');
+    dupList.insertLast('a');
+    dupList.insertLast('l');
+    dupList.insertLast('b');
+    dupList.insertLast('o');
+    dupList.insertLast('a');
+
+    dupList2.insertLast('B');
+    dupList2.insertLast('a');
+    dupList2.insertLast('l');
+    dupList2.insertLast('b');
+    dupList2.insertLast('o');
+    dupList2.insertLast('b');
+
+    console.log(compareLLSCharWise(dupList, dupList2));
+    deleteDuplicates(dupList);
+    // console.log(JSON.stringify(dupList, null, 2));
 }
 
 main();
@@ -287,4 +308,70 @@ function cycleList(list)  {
 
 function sortList(list) {
     // need guidance on this.
+}
+
+function deleteDuplicates(list) {
+    let currNode = list.head;
+
+    while (currNode.next !== null) {
+        if (currNode.value === currNode.next.value) {
+            console.log(`duplicate ${currNode.value} and ${currNode.next.value}`)
+            currNode.next = currNode.next.next;
+            return;
+        }
+        currNode = currNode.next;
+    }
+}
+
+function compareLLSCharWise(list1, list2) {
+    // if (!list1 || !list2) return null;
+    // if (size(list1) > size(list2)) return 1;
+    // if (size(list1) < size(list2)) return -1;
+    // else {
+    //     let charCodeTotal1 = 0;
+    //     let charCodeTotal2 = 0;
+    //
+    //     let currNode1 = list1.head;
+    //     let currNode2 = list2.head;
+    //
+    //     while (currNode1 !== null) {
+    //         console.log('list1 value ', currNode1.value);
+    //         charCodeTotal1 += currNode1.value.charCodeAt(0);
+    //         currNode1 = currNode1.next;
+    //     }
+    //
+    //     while (currNode2 !== null) {
+    //         console.log('list2 value ', currNode2.value);
+    //         charCodeTotal2 += currNode2.value.charCodeAt(0);
+    //         currNode2 = currNode2.next;
+    //     }
+    //
+    //     // console.log(charCodeTotal1, charCodeTotal2);
+    //     if (charCodeTotal2 < charCodeTotal1) return 1;
+    //     else if (charCodeTotal2 === charCodeTotal1) return 0;
+    //     else if (charCodeTotal2 > charCodeTotal1) return -1;
+    // }
+    let currNode1 = list1.head;
+    let currNode2 = list2.head;
+
+    while (currNode1 !== null && currNode2 !== null && currNode1.value === currNode2.value) {
+        currNode1 = currNode1.next;
+        currNode2 = currNode2.next;
+    }
+    
+    if (currNode1 !== null && currNode2 !== null) {
+        return (currNode1.value > currNode2.value ? 1 : -1);
+    }
+
+    if (currNode1 !== null && currNode2 === null) {
+        return 1;
+    }
+    else if (currNode1 === null && currNode2 !== null) {
+        return -1;
+    }
+    console.log('miss')
+    return 0;
+
+
+
 }
