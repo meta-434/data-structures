@@ -110,10 +110,10 @@ class BinarySearchTree {
 
     _replaceWith(node) {
         if (this.parent) {
-            if (this == this.parent.left) {
+            if (this === this.parent.left) {
                 this.parent.left = node;
             }
-            else if (this == this.parent.right) {
+            else if (this === this.parent.right) {
                 this.parent.right = node;
             }
 
@@ -146,17 +146,28 @@ class BinarySearchTree {
 }
 
 function main() {
+    // 5 15 50 10 24 35 70 4 12 18 31 44 66 90 22
     const BST = new BinarySearchTree();
-    BST.insert(3, 3);
-    BST.insert(1, 1);
-    BST.insert(4, 4);
-    BST.insert(6, 6);
-    BST.insert(9, 9);
-    BST.insert(2, 2);
-    BST.insert(5, 5);
-    BST.insert(7, 7);
+    BST.insert(25, '25');
+    BST.insert(15, '15');
+    BST.insert(50, '50');
+    BST.insert(10, '10');
+    BST.insert(24, '24');
+    BST.insert(35, '35');
+    BST.insert(70, '70');
+    BST.insert(4, '4');
+    BST.insert(12, '12');
+    BST.insert(18, '18');
+    BST.insert(31, '31');
+    BST.insert(44, '44');
+    BST.insert(66, '66');
+    BST.insert(90, '90');
+    BST.insert(22, '22');
 
-    console.log(height(BST));
+    // console.log(BST);
+    // console.log(inOrder(BST));
+    // console.log(preOrder(BST));
+    console.log(postOrder(BST))
 }
 
 main();
@@ -170,11 +181,57 @@ function tree(t){
     return tree(t.left) + t.value + tree(t.right)
 }
 
-function height(t){
-    if(!t) return 0;
-    if (t && t.left === null && t.right === null) return 1;
-    else {
-        let count = 1;
-        
+function height(t, counter = 1) {
+    if (t.left && t.right) {
+        return Math.max(...[height(t.left, counter + 1), height(t.right,counter + 1)]);
+    } else if (t.left) {
+        return height(t.left, counter + 1);
+    } else if (t.right) {
+        return height(t.right, counter + 1);
+    } else {
+        return counter;
     }
 }
+
+/**
+ * @param {BinarySearchTree} t tree for inOrder traversal
+ */
+function inOrder(t) {
+    // L, N, R
+    // console.log('inOrder');
+    if (t === null) {
+        return;
+    }
+
+    inOrder(t.left);
+
+    console.log(t.key + " ");
+
+    inOrder(t.right);
+}
+
+/**
+ * @param {BinarySearchTree} t tree for preOrder traversal
+ */
+function preOrder(t) {
+    // N, L, R
+    if (t === null) {
+        return;
+    }
+
+    console.log(t.key + ' ');
+    preOrder(t.left);
+    preOrder(t.right);
+}
+
+/**
+ * @param {BinarySearchTree} t tree for postOrder traversal
+ */
+function postOrder(t) {
+    // L, R, N
+    if (t === null) return;
+    postOrder(t.left);
+    postOrder(t.right);
+    console.log(t.key + ' ');
+}
+
